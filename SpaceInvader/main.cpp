@@ -4,6 +4,9 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "InvadersCl.h"
+
+int rightMoves=0;
+bool rightSide=true, leftSide=false;
 int main()
 {
 
@@ -32,15 +35,6 @@ int main()
         invaderX+=35;
         invaderNum++;
     }
-//    for (float y=5;y<=105;y+=25){
-//        for (float x=0;x<=350;x+=35, counter++){
-//            invaders[counter]=InvadersCl();
-//            invaders[counter].invader.setPosition(sf::Vector2f(x,y));
-//            //counter++;
-//        }
-//
-//    }
-
 
 
     float playerX = 1;
@@ -54,8 +48,17 @@ int main()
     // the clock object keeps the time.
     sf::Clock clock;
     clock.restart();
+    invaderX = 0;
+    invaderY = 0;
+    bool reachEnd=true, reachBegining= false;
+    int movesCounter;
+
+
     while (window.isOpen())
     {
+
+        invaderNum=0;
+        invaderX=0;
         // check if the close window button is clicked on.
         sf::Event event;
         while (window.pollEvent(event))
@@ -67,34 +70,54 @@ int main()
         timeSinceLastUpdate += clock.restart();
         //update every 60th of a second
         //only when the time since last update is greate than 1/60 update the world.
-        if (timeSinceLastUpdate > timePerFrame)
-        {
+        if (timeSinceLastUpdate > timePerFrame) {
             // get keyboard input.
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-            {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
                 playerX = playerX - playerSpeed;
             }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-            {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
                 playerX = playerX + playerSpeed;
             }
 
-//my code for moving invaders
+//my code for moving invaders************************************************
+        if(rightSide) {
+            invaderX = invaderX + invaderSpeed;
+            for (int i = 0; i < 55; i++) {
+                invaders[invaderNum].invader.move(invaderX, invaderY);
+                invaderNum++;
+            }
+            rightMoves++;
+            if (rightMoves == 220) {
+                rightSide = false;
+                leftSide = true;
+                invaderNum = 0;
+                for (int i = 0; i < 55; i++) {
+                    sf::Vector2f position =invaders[i].invader.getPosition();
+                    std::cout<<invaderNum;
+                    invaders[i].invader.setPosition(sf::Vector2f(position.x,position.y+10));
+                }
+            }
+        }
+            if(leftSide){
+                invaderX= invaderX-invaderSpeed;
+                for (int i = 0; i < 55; i++) {
+                    invaders[invaderNum].invader.move(invaderX, invaderY);
+                    invaderNum++;
 
-//            invaderX1= invaderX1+invaderSpeed ;
-//            if(invaderX1==0){
-//                invaderSpeed *= -1;
-//                invaderY1 +=20;
-//
-//            }
-//            if(invaderX1==580){
-//                invaderSpeed *= -1;
-//                invaderY1 +=20;
-//            }
-//            for (int i=0;i<55;i++){
-//                invaders[i].invader.setPosition(x,y);
-//            }
+                }
+                rightMoves--;
+                if(rightMoves==0){
+                    rightSide=true;
+                    leftSide=false;
+                    for (int i = 0; i < 55; i++) {
+                        sf::Vector2f position =invaders[i].invader.getPosition();
+                        std::cout<<invaderNum;
+                        invaders[i].invader.setPosition(sf::Vector2f(position.x,position.y+10));
+                    }
 
+                }
+            }
+//**********end of moving invaders ******************************************************
 
             // update any variables..
             player.setPosition(playerX, playerY);
@@ -112,6 +135,12 @@ int main()
             // reset the timeSinceLastUpdate to 0
             timeSinceLastUpdate = sf::Time::Zero;
         }
+
+
+
+
+
+
         //my code
         if (playerX==0){
             playerX=559;
@@ -119,7 +148,9 @@ int main()
         else if(playerX==560){
             playerX=1;
         }
+
     }
+
 
     return 0;
 }
