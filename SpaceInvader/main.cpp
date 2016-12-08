@@ -4,9 +4,13 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "InvadersCl.h"
+#include "cmake_module/BulletCl.h"
 
 int rightMoves=0;
 bool rightSide=true, leftSide=false;
+BulletCl bullet;
+float bulletY;
+bool createBullet=true;
 int main()
 {
 
@@ -21,6 +25,7 @@ int main()
     float invaderX = 0;
     float invaderY = 0;
     float invaderSpeed = 1.0f;
+    float bulletSpeed=0.1f;
 // array of invaders
     InvadersCl invaders[55];
     int invaderNum=0;
@@ -40,6 +45,7 @@ int main()
     float playerX = 1;
     float playerY = 379;
     float playerSpeed = 1.0f;
+
     player.setFillColor(sf::Color::Red);
     player.setPosition(playerX, playerY);
     // set timepeFrame to 1 60th of a second. 60 frames per second
@@ -48,10 +54,8 @@ int main()
     // the clock object keeps the time.
     sf::Clock clock;
     clock.restart();
-    invaderX = 0;
     invaderY = 0;
-    bool reachEnd=true, reachBegining= false;
-    int movesCounter;
+
 
 
     while (window.isOpen())
@@ -79,6 +83,17 @@ int main()
                 playerX = playerX + playerSpeed;
             }
 
+            //Bullets ******************************************
+            for (int i=0;i<400;i++){
+
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+                    sf::Vector2f playerPosition = player.getPosition();
+                    bulletY= bulletY-bulletSpeed;
+                    bullet.bullet.setPosition(sf::Vector2f(playerPosition.x+15, playerPosition.y-10));
+                    bullet.bullet.move(sf::Vector2f(playerPosition.x+15, bulletY));
+                }
+                // window.draw(bullet.bullet);
+            }
 //my code for moving invaders************************************************
         if(rightSide) {
             invaderX = invaderX + invaderSpeed;
@@ -93,7 +108,6 @@ int main()
                 invaderNum = 0;
                 for (int i = 0; i < 55; i++) {
                     sf::Vector2f position =invaders[i].invader.getPosition();
-                    std::cout<<invaderNum;
                     invaders[i].invader.setPosition(sf::Vector2f(position.x,position.y+10));
                 }
             }
@@ -103,7 +117,6 @@ int main()
                 for (int i = 0; i < 55; i++) {
                     invaders[invaderNum].invader.move(invaderX, invaderY);
                     invaderNum++;
-
                 }
                 rightMoves--;
                 if(rightMoves==0){
@@ -111,10 +124,8 @@ int main()
                     leftSide=false;
                     for (int i = 0; i < 55; i++) {
                         sf::Vector2f position =invaders[i].invader.getPosition();
-                        std::cout<<invaderNum;
                         invaders[i].invader.setPosition(sf::Vector2f(position.x,position.y+10));
                     }
-
                 }
             }
 //**********end of moving invaders ******************************************************
@@ -129,11 +140,21 @@ int main()
                 window.draw(invaders[i].invader);
             }
 
-
+            window.draw(bullet.bullet);
 
             window.display();
             // reset the timeSinceLastUpdate to 0
             timeSinceLastUpdate = sf::Time::Zero;
+
+
+
+
+
+
+
+
+
+
         }
 
 

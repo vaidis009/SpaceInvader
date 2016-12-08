@@ -3,7 +3,7 @@ project(SpaceInvader)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-set(SOURCE_FILES main.cpp InvadersCl.cpp InvadersCl.h)
+set(SOURCE_FILES main.cpp InvadersCl.cpp InvadersCl.h cmake_module/BulletCl.cpp cmake_module/BulletCl.h)
 add_executable(SpaceInvader ${SOURCE_FILES})
 
 
