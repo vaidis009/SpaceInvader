@@ -55,9 +55,6 @@ int main()
     sf::Clock clock;
     clock.restart();
     invaderY = 0;
-
-
-
     while (window.isOpen())
     {
 
@@ -82,17 +79,14 @@ int main()
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
                 playerX = playerX + playerSpeed;
             }
-
-            //Bullets ******************************************
-            for (int i=0;i<400;i++){
-
+//Bullets ******************************************
+           for (int i=0;i<380;i++){
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
                     sf::Vector2f playerPosition = player.getPosition();
                     bulletY= bulletY-bulletSpeed;
                     bullet.bullet.setPosition(sf::Vector2f(playerPosition.x+15, playerPosition.y-10));
-                    bullet.bullet.move(sf::Vector2f(playerPosition.x+15, bulletY));
+                    bullet.bullet.move(sf::Vector2f(0, bulletY));
                 }
-                // window.draw(bullet.bullet);
             }
 //my code for moving invaders************************************************
         if(rightSide) {
@@ -145,23 +139,7 @@ int main()
             window.display();
             // reset the timeSinceLastUpdate to 0
             timeSinceLastUpdate = sf::Time::Zero;
-
-
-
-
-
-
-
-
-
-
         }
-
-
-
-
-
-
         //my code
         if (playerX==0){
             playerX=559;
